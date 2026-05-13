@@ -19,14 +19,50 @@ async def main() -> None:
         print(result)
         print()
 
+        print("--- get_model ---")
+        result = await client.call_tool("get_model", {"owner": "stability-ai", "name": "sdxl"})
+        print(result)
+        print()
+
+        print("--- list_versions ---")
+        result = await client.call_tool("list_versions", {"owner": "stability-ai", "name": "sdxl", "limit": 3})
+        print(result)
+        print()
+
         print("--- list_collections ---")
         result = await client.call_tool("list_collections", {"limit": 3})
         print(result)
         print()
 
-        print("--- get_model ---")
-        result = await client.call_tool("get_model", {"owner": "stability-ai", "name": "sdxl"})
+        print("--- list_predictions ---")
+        result = await client.call_tool("list_predictions", {"limit": 3})
         print(result)
+        print()
+
+        print("--- run_prediction ---")
+        result = await client.call_tool("run_prediction", {
+            "model_owner": "stability-ai",
+            "model_name": "sdxl",
+            "input": {"prompt": "a beautiful sunset"},
+            "wait": True,
+        })
+        print(result)
+        print()
+
+        prediction_id = ""
+        if hasattr(result, 'data') and result.data:
+            pred = result.data[0] if isinstance(result.data, list) else result.data
+            prediction_id = pred.get("id", "") if isinstance(pred, dict) else ""
+
+        if prediction_id:
+            print("--- get_prediction ---")
+            result = await client.call_tool("get_prediction", {"id": prediction_id})
+            print(result)
+            print()
+
+            print("--- cancel_prediction ---")
+            result = await client.call_tool("cancel_prediction", {"id": prediction_id})
+            print(result)
 
 
 if __name__ == "__main__":

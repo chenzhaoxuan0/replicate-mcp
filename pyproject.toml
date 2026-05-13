@@ -23,8 +23,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chenzhaoxuan0/replicate-mcp"
-Repository = "https://github.com/chenzhaoxuan0/replicate-mcp"
+Homepage = "https://github.com/dedalus-labs/replicate-mcp"
+Repository = "https://github.com/dedalus-labs/replicate-mcp"
 
 [dependency-groups]
 test = [
