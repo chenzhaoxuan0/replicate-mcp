@@ -1,13 +1,17 @@
 import asyncio
+import os
 
 from dotenv import load_dotenv
-from dedalus_mcp.client import MCPClient
+from dedalus_mcp.client import BearerAuth, open_connection
 
 load_dotenv()
 
 
 async def main() -> None:
-    async with MCPClient("http://localhost:8080/mcp") as client:
+    api_key = os.getenv("DEDALUS_API_KEY", "")
+    auth = BearerAuth(access_token=api_key) if api_key else None
+
+    async with open_connection("http://localhost:8080/mcp", auth=auth) as client:
         tools = await client.list_tools()
         print("Available tools:")
         for t in tools:
@@ -50,7 +54,7 @@ async def main() -> None:
         print()
 
         prediction_id = ""
-        if hasattr(result, 'data') and result.data:
+        if hasattr(result, "data") and result.data:
             pred = result.data[0] if isinstance(result.data, list) else result.data
             prediction_id = pred.get("id", "") if isinstance(pred, dict) else ""
 
