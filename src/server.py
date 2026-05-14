@@ -41,4 +41,4 @@ async def main() -> None:
         cancel_prediction,
         list_collections,
     )
-    await server.serve(8080)
+    await server.serve(port=8080)
