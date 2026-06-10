@@ -42,7 +42,12 @@ async def _dispatch(path: str, *, method: HttpMethod = HttpMethod.GET, body: dic
         _CONN_NAME,
         HttpRequest(method=method, path=path, body=body),
     )
-    return resp.body or {}, resp.error
+    if resp.success and resp.response is not None:
+        raw = resp.response.body
+        if resp.response.status >= 400:
+            return {}, f"Replicate API error ({resp.response.status}): {raw}"
+        return raw if isinstance(raw, dict) else {}, None
+    return {}, resp.error.message if resp.error else "Replicate request failed"
 
 
 def _extract_cursor(next_url: str | None) -> str:
