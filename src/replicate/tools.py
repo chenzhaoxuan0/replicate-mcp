@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from typing import Any
 from urllib.parse import urlparse, parse_qs
 
@@ -22,7 +23,7 @@ from replicate.types import (
     VersionInfo,
 )
 
-_CONN_NAME = "replicate"
+_CONN_NAME = os.getenv("MCP_SERVER_SLUG", "Zx/replicate-mcp").replace("/", "-")
 
 replicate_conn = Connection(
     name=_CONN_NAME,
